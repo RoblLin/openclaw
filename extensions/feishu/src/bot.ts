@@ -556,6 +556,12 @@ export async function handleFeishuMessage(params: {
       parentPeer,
     });
 
+    //if fallback to main agent, try to use account id as agent id
+    if (route.agentId == "main") {
+      route.agentId = route.accountId || "main";
+      log(`Modify feishu[${account.accountId}]: [DEBUG] route=${JSON.stringify(route)}`);
+    }
+
     // Dynamic agent creation for DM users
     // When enabled, creates a unique agent instance with its own workspace for each DM user.
     let effectiveCfg = cfg;
