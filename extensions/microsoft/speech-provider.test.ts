@@ -1,4 +1,5 @@
 import { writeFileSync } from "node:fs";
+import type { OpenClawConfig } from "openclaw/plugin-sdk/config-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   buildMicrosoftSpeechProvider,
@@ -6,6 +7,8 @@ import {
   listMicrosoftVoices,
 } from "./speech-provider.js";
 import * as ttsModule from "./tts.js";
+
+const TEST_CFG = {} as OpenClawConfig;
 
 describe("listMicrosoftVoices", () => {
   const originalFetch = globalThis.fetch;
@@ -95,6 +98,7 @@ describe("buildMicrosoftSpeechProvider", () => {
 
     await provider.synthesize({
       text: "你好，这是一个测试 hello",
+      cfg: TEST_CFG,
       providerConfig: {
         enabled: true,
         voice: "en-US-MichelleNeural",
@@ -105,7 +109,7 @@ describe("buildMicrosoftSpeechProvider", () => {
       },
       providerOverrides: {},
       timeoutMs: 1000,
-      target: "audio",
+      target: "audio-file",
     });
 
     expect(edgeSpy).toHaveBeenCalledWith(
@@ -126,6 +130,7 @@ describe("buildMicrosoftSpeechProvider", () => {
 
     await provider.synthesize({
       text: "你好，这是一个测试 hello",
+      cfg: TEST_CFG,
       providerConfig: {
         enabled: true,
         voice: "en-US-AvaNeural",
@@ -136,7 +141,7 @@ describe("buildMicrosoftSpeechProvider", () => {
       },
       providerOverrides: {},
       timeoutMs: 1000,
-      target: "audio",
+      target: "audio-file",
     });
 
     expect(edgeSpy).toHaveBeenCalledWith(
